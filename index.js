@@ -1,7 +1,8 @@
 const https = require('https');
 const util = require('util');
 
-const path = '/services/T0321UYBP/B6AHG8WGZ/Ma3G5NBjXnrZEx4tWBJOCAyn';
+const path = process.env.SLACK_WEBHOOK_URL;
+const LOCALE = 'en-US';
 
 exports.handler = (event, context) => {
   const options = {
@@ -14,13 +15,14 @@ exports.handler = (event, context) => {
   const eventData = JSON.parse(event.Records[0].Sns.Message);
 
   eventData.Records.forEach((record) => {
+    const fileSize = record.s3.object.size / 1000;
     const postData = {
-      text: `New file uploaded: ${record.s3.object.key} to bucket: ${record.s3.bucket.name} with size: ${record.s3.object.size}`
+      text: `New file uploaded: ${record.s3.object.key} to bucket: ${record.s3.bucket.name} with size: ${fileSize.toLocaleString(LOCALE)} KB`
     };
 
     const req = https.request(options, (res) => {
       res.setEncoding('utf8');
-      res.on('data', (chunk) => {
+      res.on('data', () => {
         context.done(null);
       });
     }) ;

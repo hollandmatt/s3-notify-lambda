@@ -22,3 +22,5 @@ Take a note of the Webhook URL.
 7. In the "Triggers" tab for your Lambda, add the SNS topic you created earlier
 8. Repeat for as many buckets as you like
 
+Now you should see a message posted to your Slack channel for each new object added to the bucket. 
+The message includes the object ID (filename), bucket name, and file size.
